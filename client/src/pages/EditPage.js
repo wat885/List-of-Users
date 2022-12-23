@@ -13,10 +13,38 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function EditPage() {
   const navigate = useNavigate();
+  const params = useParams();
+
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/api/users/${params.id}`
+      );
+      console.log(response.data.data);
+      setName(response.data.data.name);
+      setAge(response.data.data.age);
+      setEmail(response.data.data.email);
+      setAvatarUrl(response.data.data.avatarurl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Flex
       minH={"100vh"}
@@ -37,20 +65,21 @@ export default function EditPage() {
         <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
           User Profile Edit
         </Heading>
+
         <FormControl id="userName">
           <FormLabel>User Icon</FormLabel>
           <Stack direction={["column", "row"]} spacing={6}>
             <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
-                <AvatarBadge
+              <Avatar size="xl" src={avatarUrl} alt={name}>
+                {/* <AvatarBadge
                   as={IconButton}
                   size="sm"
                   rounded="full"
                   top="-10px"
                   colorScheme="red"
                   aria-label="remove Image"
-                  icon={<SmallCloseIcon />}
-                />
+                  icon={<SmallCloseIcon onClick={() => console.log("test")} />}
+                /> */}
               </Avatar>
             </Center>
             <Center w="full">
@@ -58,12 +87,24 @@ export default function EditPage() {
             </Center>
           </Stack>
         </FormControl>
-        <FormControl id="userName" isRequired>
-          <FormLabel>User name</FormLabel>
+        <FormControl id="name" isRequired>
+          <FormLabel>Name</FormLabel>
           <Input
-            placeholder="UserName"
+            placeholder="Name"
             _placeholder={{ color: "gray.500" }}
             type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </FormControl>
+        <FormControl id="age" isRequired>
+          <FormLabel>Age</FormLabel>
+          <Input
+            placeholder="Age"
+            _placeholder={{ color: "gray.500" }}
+            type="age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
           />
         </FormControl>
         <FormControl id="email" isRequired>
@@ -72,14 +113,8 @@ export default function EditPage() {
             placeholder="your-email@example.com"
             _placeholder={{ color: "gray.500" }}
             type="email"
-          />
-        </FormControl>
-        <FormControl id="password" isRequired>
-          <FormLabel>Password</FormLabel>
-          <Input
-            placeholder="password"
-            _placeholder={{ color: "gray.500" }}
-            type="password"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <Stack spacing={6} direction={["column", "row"]}>

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from 'react'
-import User from './pages/User'
+
 import UserPage from './pages/UserPage'
 
 import EditPage from "./pages/EditPage";
