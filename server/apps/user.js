@@ -53,4 +53,23 @@ userRouter.get("/", async (req, res) => {
   });
 });
 
+userRouter.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  let status = "";
+
+  console.log(id);
+  const results = await pool.query(
+    `DELETE FROM user_lists WHERE user_id =  $1 RETURNING *`,
+    [id]
+  );
+
+  if (results.rows[0]) status = "success";
+  else status = "failed";
+
+  return res.json({
+    message: `User ${id} has been deleted ${status}.`,
+    status: status,
+  });
+});
+
 export default userRouter;
