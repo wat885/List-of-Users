@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
+import { validatetData } from "../Middleware/validatetData.js";
 
 const userRouter = Router();
 
@@ -75,21 +76,24 @@ userRouter.get("/:id", async (req, res) => {
   }
 });
 
-userRouter.post("/", async (req, res) => {
+userRouter.post("/", [validatetData], async (req, res) => {
   const newPost = {
     ...req.body,
   };
 
-  console.log(req.body);
+  console.log(newPost);
 
-  await pool.query(
+  const result = await pool.query(
     `insert into user_lists (name, age, email, avatarUrl)
-    values ($1, $2, $3, $4)`,
+    values ($1, $2, $3, $4) RETURNING *`,
     [newPost.name, newPost.age, newPost.email, newPost.avatarUrl]
   );
 
+
   return res.json({
-    message: "Post has been created.",
+    data: result.rows[0],
+    status: "success",
+    message: "User has been created.",
   });
 });
 
