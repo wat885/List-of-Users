@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
-import { validatetData } from "../Middleware/user.validations.js";
+import { validatetData, validatetUpdateData } from "../Middleware/user.validations.js";
 
 const userRouter = Router();
 
@@ -100,7 +100,7 @@ userRouter.post("/", [validatetData], async (req, res) => {
   });
 });
 
-userRouter.put("/:id", async (req, res) => {
+userRouter.put("/:id", [validatetUpdateData], async (req, res) => {
   const id = req.params.id;
   const editUser = {
     ...req.body,

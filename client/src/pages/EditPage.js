@@ -67,7 +67,11 @@ export default function EditPage() {
       );
       console.log(response.data);
 
-      if (response.data.status === "success") {
+      if (response.data.status === "duplicate")
+        addToast("warning", response.data.message);
+      else if (response.data.status === "emailNotValid")
+        addToast("warning", response.data.message);
+      else if (response.data.status === "success") {
         setIsLoaded(true);
         setTimeout(() => {
           // console.log("Delayed for 1.5 second.");
