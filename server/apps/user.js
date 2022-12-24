@@ -85,12 +85,7 @@ userRouter.post("/", async (req, res) => {
   await pool.query(
     `insert into user_lists (name, age, email, avatarUrl)
     values ($1, $2, $3, $4)`,
-    [
-      1,
-      newPost.title,
-      newPost.content,
-      newPost.status,
-    ]
+    [newPost.name, newPost.age, newPost.email, newPost.avatarUrl]
   );
 
   return res.json({
