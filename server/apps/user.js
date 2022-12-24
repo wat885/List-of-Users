@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
-import { validatetData } from "../Middleware/validatetData.js";
+import { validatetData } from "../Middleware/user.validations.js";
 
 const userRouter = Router();
 
@@ -25,8 +25,10 @@ userRouter.get("/", async (req, res) => {
       query = `select * from user_lists
     where name ilike $1 or
     email ilike $1
+    ORDER BY user_id ASC 
     limit $2
-    offset $3`;
+    offset $3
+    `;
       values = [q, limit, offset];
 
       let query2 = `select count(*) from user_lists
@@ -37,8 +39,10 @@ userRouter.get("/", async (req, res) => {
       total_page = total / limit;
     } else {
       query = `select * from user_lists
-    limit $1
-    offset $2`;
+      ORDER BY user_id ASC 
+      limit $1
+      offset $2
+    `;
       values = [limit, offset];
 
       total = await pool.query(`select count(*) from user_lists`);
@@ -77,23 +81,50 @@ userRouter.get("/:id", async (req, res) => {
 });
 
 userRouter.post("/", [validatetData], async (req, res) => {
-  const newPost = {
+  const newUser = {
     ...req.body,
   };
 
-  console.log(newPost);
+  console.log(newUser);
 
   const result = await pool.query(
     `insert into user_lists (name, age, email, avatarUrl)
     values ($1, $2, $3, $4) RETURNING *`,
-    [newPost.name, newPost.age, newPost.email, newPost.avatarUrl]
+    [newUser.name, newUser.age, newUser.email, newUser.avatarUrl]
   );
-
 
   return res.json({
     data: result.rows[0],
     status: "success",
     message: "User has been created.",
+  });
+});
+
+userRouter.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const editUser = {
+    ...req.body,
+  };
+
+  console.log(editUser);
+
+  const result = await pool.query(
+    `UPDATE user_lists 
+    SET name = $2,
+    age = $3,
+    email = $4,
+    avatarUrl = $5
+    WHERE user_id = $1
+    RETURNING *`,
+    [id, editUser.name, editUser.age, editUser.email, editUser.avatarUrl]
+  );
+
+  console.log(result.rows[0]);
+
+  return res.json({
+    data: result.rows[0],
+    status: "success",
+    message: "User has been updated.",
   });
 });
 

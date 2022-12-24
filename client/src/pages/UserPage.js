@@ -127,6 +127,7 @@ function UserPage() {
                 <Button
                   colorScheme="red"
                   onClick={() => {
+                    
                     onClose();
                     deleteUser(user_id, perPage, page);
                   }}

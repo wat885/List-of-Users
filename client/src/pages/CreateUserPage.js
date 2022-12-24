@@ -12,6 +12,7 @@ import {
   IconButton,
   Center,
   useToast,
+  Progress,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,7 @@ export default function EditPage() {
   const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -49,7 +51,15 @@ export default function EditPage() {
         addToast("warning", response.data.message);
       else if (response.data.status === "emailNotValid")
         addToast("warning", response.data.message);
-      else {
+      else if (response.data.status === "success") {
+        setIsLoaded(true);
+        setTimeout(() => {
+          // console.log("Delayed for 1.5 second.");
+          setIsLoaded(true);
+          addToast("success", response.data.message);
+          navigate(`/`);
+        }, 1500);
+      } else {
         navigate(`/`);
       }
     } catch (error) {
@@ -81,17 +91,19 @@ export default function EditPage() {
         p={6}
         my={12}
       >
-        <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-          User Profile Create
-        </Heading>
-
-        <form onSubmit={handleSubmit}>
-          <FormControl id="userName">
-            <FormLabel>User Icon</FormLabel>
-            <Stack direction={["column", "row"]} spacing={6}>
-              <Center>
-                <Avatar size="xl" src={avatarUrl} alt={name}>
-                  {/* <AvatarBadge
+        {isLoaded ? (
+          <Progress size="xs" isIndeterminate />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
+              User Profile Create
+            </Heading>
+            <FormControl id="userName">
+              <FormLabel>User Icon</FormLabel>
+              <Stack direction={["column", "row"]} spacing={6}>
+                <Center>
+                  <Avatar size="xl" src={avatarUrl} alt={name}>
+                    {/* <AvatarBadge
                   as={IconButton}
                   size="sm"
                   rounded="full"
@@ -100,68 +112,69 @@ export default function EditPage() {
                   aria-label="remove Image"
                   icon={<SmallCloseIcon onClick={() => console.log("test")} />}
                 /> */}
-                </Avatar>
-              </Center>
-              <Center w="full">
-                <Button w="full">Change Icon</Button>
-              </Center>
+                  </Avatar>
+                </Center>
+                <Center w="full">
+                  <Button w="full">Change Icon</Button>
+                </Center>
+              </Stack>
+            </FormControl>
+            <FormControl id="name" isRequired>
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder="Name"
+                _placeholder={{ color: "gray.500" }}
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="age" isRequired>
+              <FormLabel>Age</FormLabel>
+              <Input
+                placeholder="Age"
+                _placeholder={{ color: "gray.500" }}
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="email" isRequired>
+              <FormLabel>Email address</FormLabel>
+              <Input
+                placeholder="your-email@example.com"
+                _placeholder={{ color: "gray.500" }}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
+            <Stack spacing={6} direction={["column", "row"]}>
+              <Button
+                bg={"red.400"}
+                color={"white"}
+                w="full"
+                _hover={{
+                  bg: "red.500",
+                }}
+                onClick={() => navigate(`/`)}
+              >
+                Cancel
+              </Button>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                w="full"
+                _hover={{
+                  bg: "blue.500",
+                }}
+                type="submit"
+              >
+                Submit
+              </Button>
             </Stack>
-          </FormControl>
-          <FormControl id="name" isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input
-              placeholder="Name"
-              _placeholder={{ color: "gray.500" }}
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </FormControl>
-          <FormControl id="age" isRequired>
-            <FormLabel>Age</FormLabel>
-            <Input
-              placeholder="Age"
-              _placeholder={{ color: "gray.500" }}
-              type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
-          </FormControl>
-          <FormControl id="email" isRequired>
-            <FormLabel>Email address</FormLabel>
-            <Input
-              placeholder="your-email@example.com"
-              _placeholder={{ color: "gray.500" }}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </FormControl>
-          <Stack spacing={6} direction={["column", "row"]}>
-            <Button
-              bg={"red.400"}
-              color={"white"}
-              w="full"
-              _hover={{
-                bg: "red.500",
-              }}
-              onClick={() => navigate(`/`)}
-            >
-              Cancel
-            </Button>
-            <Button
-              bg={"blue.400"}
-              color={"white"}
-              w="full"
-              _hover={{
-                bg: "blue.500",
-              }}
-              type="submit"
-            >
-              Submit
-            </Button>
-          </Stack>
-        </form>
+          </form>
+        )}
       </Stack>
     </Flex>
   );
