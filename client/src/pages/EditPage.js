@@ -134,9 +134,9 @@ export default function EditPage() {
                 /> */}
                   </Avatar>
                 </Center>
-                <Center w="full">
+                {/* <Center w="full">
                   <Button w="full">Change Icon</Button>
-                </Center>
+                </Center> */}
               </Stack>
             </FormControl>
             <FormControl id="name" isRequired>

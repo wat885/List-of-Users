@@ -18,6 +18,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -127,7 +128,6 @@ function UserPage() {
                 <Button
                   colorScheme="red"
                   onClick={() => {
-                    
                     onClose();
                     deleteUser(user_id, perPage, page);
                   }}
@@ -202,10 +202,20 @@ function UserPage() {
   };
 
   return (
-    <Box p="12">
-      <Flex alignItems="center" justify="space-between">
-        <Heading size="lg" as="h3" maxWidth="300px">
-          List of Users
+    <Box
+      p="12"
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Flex
+        alignItems="center"
+        justify="space-between"
+        bg={useColorModeValue("white", "gray.700")}
+      >
+        <Heading size="m" as="h3" maxWidth="300px">
+          Users
         </Heading>
         <InputGroup maxWidth="600px">
           <InputLeftElement

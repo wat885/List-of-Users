@@ -30,7 +30,9 @@ export default function EditPage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setAvatarUrl(image[Math.floor(Math.random() * image.length)]);
+  }, []);
 
   const handleSubmit = async (event) => {
     try {
@@ -40,7 +42,7 @@ export default function EditPage() {
         name: name,
         age: Number(age),
         email: email,
-        avatarUrl: "https://robohash.org/haruminveniam.png?size=50x50&set=set1",
+        avatarUrl: avatarUrl,
       };
 
       const response = await axios.post(
@@ -114,9 +116,9 @@ export default function EditPage() {
                 /> */}
                   </Avatar>
                 </Center>
-                <Center w="full">
+                {/* <Center w="full">
                   <Button w="full">Change Icon</Button>
-                </Center>
+                </Center> */}
               </Stack>
             </FormControl>
             <FormControl id="name" isRequired>
@@ -179,3 +181,16 @@ export default function EditPage() {
     </Flex>
   );
 }
+
+const image = [
+  "https://robohash.org/beataecupiditateet.png?size=50x50&set=set1",
+  "https://robohash.org/accusantiumrerumneque.png?size=50x50&set=set1",
+  "https://robohash.org/ipsainciduntet.png?size=50x50&set=set1",
+  "https://robohash.org/perspiciatisestmodi.png?size=50x50&set=set1",
+  "https://robohash.org/perspiciatisestmodi.png?size=50x50&set=set1",
+  "https://robohash.org/dolorumquasquaerat.png?size=50x50&set=set1",
+  "https://robohash.org/doloribusnonitaque.png?size=50x50&set=set1",
+  "https://robohash.org/voluptatemdoloribusdolores.png?size=50x50&set=set1",
+  "https://robohash.org/utvitaeillo.png?size=50x50&set=set1",
+  "https://robohash.org/earumtemporesunt.png?size=50x50&set=set1",
+];
