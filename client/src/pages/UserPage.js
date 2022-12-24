@@ -127,6 +127,7 @@ function UserPage() {
                 <Button
                   colorScheme="red"
                   onClick={() => {
+                    
                     onClose();
                     deleteUser(user_id, perPage, page);
                   }}
@@ -146,7 +147,8 @@ function UserPage() {
     fetchData(1, perPage, search);
   }, [search]);
 
-  console.log(search);
+  // console.log(search);
+  // console.log(items)
 
   const fetchData = async (page, per_page, search) => {
     try {
@@ -155,7 +157,7 @@ function UserPage() {
       );
       setIsLoaded(true);
       setItems(response.data.data);
-      console.log(items);
+      // console.log(items);
       setTotalRows(response.data.total);
     } catch (error) {
       setIsLoaded(true);
