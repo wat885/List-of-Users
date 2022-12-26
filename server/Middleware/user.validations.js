@@ -6,7 +6,7 @@ export async function validatetData(req, res, next) {
     console.log("age pass");
   } else {
     console.log("age not a number.");
-    return res.json({
+    return res.status(400).json({
       status: "age not a number",
       message: `age not a number.`,
     });
@@ -16,7 +16,7 @@ export async function validatetData(req, res, next) {
     console.log("email pass");
   } else {
     console.log("Please Enter a valid email.");
-    return res.json({
+    return res.status(400).json({
       status: "emailNotValid",
       message: `Please Enter a valid email.`,
     });
@@ -33,7 +33,7 @@ export async function validatetData(req, res, next) {
     next();
   } else {
     console.log(`Email ${req.body.email} is duplicate.`);
-    return res.json({
+    return res.status(400).json({
       status: "duplicate",
       message: `Email ${req.body.email} is duplicate.`,
     });
@@ -51,7 +51,7 @@ export async function validatetUpdateData(req, res, next) {
     console.log("age pass");
   } else {
     console.log("age not a number.");
-    return res.json({
+    return res.status(400).json({
       status: "age not a number",
       message: `age not a number.`,
     });
@@ -61,7 +61,7 @@ export async function validatetUpdateData(req, res, next) {
     console.log("email pass");
   } else {
     console.log("Please Enter a valid email.");
-    return res.json({
+    return res.status(400).json({
       status: "emailNotValid",
       message: `Please Enter a valid email.`,
     });
@@ -92,7 +92,7 @@ export async function validatetUpdateData(req, res, next) {
       next();
     } else {
       console.log(`Email ${req.body.email} is duplicate.`);
-      return res.json({
+      return res.status(400).json({
         status: "duplicate",
         message: `Email ${req.body.email} is duplicate.`,
       });

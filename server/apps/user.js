@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
-import { validatetData, validatetUpdateData } from "../Middleware/user.validations.js";
+import {
+  validatetData,
+  validatetUpdateData,
+} from "../Middleware/user.validations.js";
 
 const userRouter = Router();
 
@@ -72,9 +75,15 @@ userRouter.get("/:id", async (req, res) => {
       [id]
     );
 
-    return res.json({
-      data: result.rows[0],
-    });
+    console.log(result.rows[0]);
+
+    if (result.rows[0]) {
+      return res.json({
+        data: result.rows[0],
+      });
+    } else {
+      res.status(404).send("User Not found");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -93,7 +102,7 @@ userRouter.post("/", [validatetData], async (req, res) => {
     [newUser.name, newUser.age, newUser.email, newUser.avatarUrl]
   );
 
-  return res.json({
+  return res.res.status(200).json({
     data: result.rows[0],
     status: "success",
     message: "User has been created.",
