@@ -83,7 +83,23 @@ export default function EditPage() {
         navigate(`/`);
       }
     } catch (error) {
-      console.log(error);
+      console.log("error", error.response.data.status);
+
+      if (error.response.data.status === "duplicate")
+        addToast("warning", error.response.data.message);
+      else if (error.response.data.status === "emailNotValid")
+        addToast("warning", error.response.data.message);
+      else if (error.response.data.status === "success") {
+        setIsLoaded(true);
+        setTimeout(() => {
+          // console.log("Delayed for 1.5 second.");
+          setIsLoaded(true);
+          addToast("success", error.response.data.message);
+          navigate(`/`);
+        }, 1500);
+      } else {
+        navigate(`/`);
+      }
     }
   };
 
